@@ -191,6 +191,9 @@ function updateCorrectHighlights() {
 }
 
 function updateTilePositions() {
+    // 🛡 ЗАЩИТА: Если фишки еще не созданы или доска пуста, прерываем выполнение
+    if (Object.keys(tileEls).length === 0 || state.board.length === 0) return;
+
     const boardRect = boardEl.getBoundingClientRect();
     if (boardRect.width === 0 || boardRect.height === 0) return;
     
@@ -208,11 +211,15 @@ function updateTilePositions() {
 
     for (let i = 0; i < TOTAL; i++) {
         const v = state.board[i];
-        if (v === EMPTY) continue;
+        if (v === EMPTY || v === undefined) continue;
+        
         const row = Math.floor(i / SIZE), col = i % SIZE;
         const x = offsetX + gap + col * (tileSize + gap);
         const y = offsetY + gap + row * (tileSize + gap);
         const el = tileEls[v];
+        
+        if (!el) continue; // 🛡 Дополнительная защита от undefined
+        
         el.style.width = tileSize + "px";
         el.style.height = tileSize + "px";
         el.style.setProperty("--pos", `translate(${x}px, ${y}px)`);
