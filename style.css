@@ -455,12 +455,6 @@ body[data-theme="forest"]::after {
     text-shadow: 0 0 10px rgba(46, 204, 113, 0.8);
 }
 
-[data-skin="space"] .tile.correct::before {
-    background:
-        radial-gradient(1px 1px at 20% 25%, rgba(255,255,255,0.5), transparent),
-        radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.5), transparent) !important;
-}
-
 /* =============== СКИНЫ =============== */
 [data-skin="wood"] .tile {
     background:
@@ -495,8 +489,7 @@ body[data-theme="forest"]::after {
 [data-skin="space"] .tile {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
     box-shadow: 0 6px 20px rgba(26,26,46,0.6), inset 0 2px 8px rgba(100,150,255,0.3);
-    position: relative;
-    overflow: hidden;
+    /* УБРАЛИ position: relative и overflow: hidden */
 }
 
 [data-skin="space"] .tile::before {
@@ -507,6 +500,14 @@ body[data-theme="forest"]::after {
         radial-gradient(1px 1px at 20% 25%, #fff, transparent),
         radial-gradient(1px 1px at 70% 60%, #fff, transparent),
         radial-gradient(1px 1px at 50% 80%, #fff, transparent);
+    pointer-events: none;  /* ← ДОБАВИЛИ: звезды не мешают кликам */
+    z-index: 0;            /* ← ДОБАВИЛИ: звезды под текстом */
+}
+
+/* Текст фишки поверх звезд */
+[data-skin="space"] .tile {
+    position: absolute;    /* ← ВАЖНО: возвращаем absolute */
+    z-index: 1;            /* Текст поверх звезд */
 }
 
 [data-skin="rainbow"] .tile {

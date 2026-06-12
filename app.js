@@ -24,7 +24,6 @@ const state = {
     _wasTimerRunning: false, _wasMusicPlaying: false, _isPaused: false
 };
 
-// Используем nameKey для динамического перевода
 const SKINS = {
     standard:    { nameKey: "skinStandard",    requirement: null },
     wood:        { nameKey: "skinWood",        requirement: { type: "wins",  value: 5 } },
@@ -200,12 +199,10 @@ function updateTilePositions() {
     const gap = 6;
     const innerPadding = 4;
 
-    // Берём минимальный размер, чтобы поле было квадратным
     const boardSize = Math.min(boardRect.width, boardRect.height);
     const availableSize = boardSize - innerPadding * 2;
     const tileSize = (availableSize - gap * (SIZE + 1)) / SIZE;
 
-    // Центрируем поле внутри board
     const offsetX = (boardRect.width - boardSize) / 2 + innerPadding;
     const offsetY = (boardRect.height - boardSize) / 2 + innerPadding;
 
@@ -218,7 +215,7 @@ function updateTilePositions() {
         const y = offsetY + gap + row * (tileSize + gap);
         const el = tileEls[v];
         
-        if (!el) continue; // 🛡 Дополнительная защита от undefined
+        if (!el) continue; // Дополнительная защита
         
         el.style.width = tileSize + "px";
         el.style.height = tileSize + "px";
@@ -315,7 +312,6 @@ async function loadRecords() {
     state.musicEnabled = data.musicEnabled === true;
     state.musicVolume = data.musicVolume != null ? data.musicVolume : 0.3;
     
-    // РАЗБЛОКИРОВКА ВСЕХ СКИНОВ ДЛЯ ТЕСТА
     if (UNLOCK_ALL_SKINS) {
         const allSkinIds = Object.keys(SKINS);
         const hasNewSkins = allSkinIds.some(id => !state.unlockedSkins.includes(id));
@@ -781,7 +777,6 @@ function detectDevice() {
     document.body.classList.toggle('is-mobile', isMobile);
     document.body.classList.toggle('is-desktop', !isMobile);
     
-    // Пересчитать позиции фишек после изменения класса
     if (typeof updateTilePositions === 'function') {
         setTimeout(updateTilePositions, 50);
     }
@@ -791,7 +786,7 @@ function detectDevice() {
 async function init() {
     setLanguage(detectLanguage());
     applyLang();
-    detectDevice(); // Определение устройства
+    detectDevice();
     
     await initYSDK();
     await loadRecords();
@@ -817,7 +812,6 @@ async function init() {
         lastTouchEnd = now;
     }, { passive: false });
 
-    // Обновление при изменении размера/ориентации
     window.addEventListener('resize', () => {
         detectDevice();
         updateTilePositions();
