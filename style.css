@@ -455,6 +455,12 @@ body[data-theme="forest"]::after {
     text-shadow: 0 0 10px rgba(46, 204, 113, 0.8);
 }
 
+[data-skin="space"] .tile.correct::before {
+    background:
+        radial-gradient(1px 1px at 20% 25%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.5), transparent) !important;
+}
+
 /* =============== СКИНЫ =============== */
 [data-skin="wood"] .tile {
     background:
@@ -486,10 +492,10 @@ body[data-theme="forest"]::after {
     text-shadow: 0 0 10px rgba(0,255,136,0.8);
 }
 
+/* ✅ ИСПРАВЛЕНО: Убраны position: relative и overflow: hidden */
 [data-skin="space"] .tile {
     background: linear-gradient(135deg, #1a1a2e, #16213e);
     box-shadow: 0 6px 20px rgba(26,26,46,0.6), inset 0 2px 8px rgba(100,150,255,0.3);
-    /* УБРАЛИ position: relative и overflow: hidden */
 }
 
 [data-skin="space"] .tile::before {
@@ -500,14 +506,8 @@ body[data-theme="forest"]::after {
         radial-gradient(1px 1px at 20% 25%, #fff, transparent),
         radial-gradient(1px 1px at 70% 60%, #fff, transparent),
         radial-gradient(1px 1px at 50% 80%, #fff, transparent);
-    pointer-events: none;  /* ← ДОБАВИЛИ: звезды не мешают кликам */
-    z-index: 0;            /* ← ДОБАВИЛИ: звезды под текстом */
-}
-
-/* Текст фишки поверх звезд */
-[data-skin="space"] .tile {
-    position: absolute;    /* ← ВАЖНО: возвращаем absolute */
-    z-index: 1;            /* Текст поверх звезд */
+    pointer-events: none;
+    z-index: 0;
 }
 
 [data-skin="rainbow"] .tile {
@@ -1281,18 +1281,15 @@ body[data-theme="forest"]::after {
 
 /* =============== МОБИЛЬНАЯ ОПТИМИЗАЦИЯ (JS детектор) =============== */
 
-/* Уменьшаем общий offset чтобы поле могло быть крупнее */
 body.is-mobile {
     --board-offset: 140px;
 }
 
-/* Уменьшаем внешние отступы и промежутки */
 body.is-mobile .app {
     padding: 8px 10px 12px;
     gap: 10px;
 }
 
-/* Компактный заголовок */
 body.is-mobile .title {
     font-size: clamp(20px, 5vw, 26px);
     letter-spacing: 0.3px;
@@ -1306,7 +1303,6 @@ body.is-mobile .header-buttons {
     gap: 8px;
 }
 
-/* Компактные текстовые кнопки */
 body.is-mobile .text-btn {
     padding: 8px 12px;
     font-size: 12px;
@@ -1318,7 +1314,6 @@ body.is-mobile .btn-icon {
     font-size: 14px;
 }
 
-/* Компактная статистика */
 body.is-mobile .stats {
     padding: 7px;
     gap: 5px;
@@ -1333,10 +1328,9 @@ body.is-mobile .stat-value {
     font-size: clamp(13px, 3.8vw, 16px);
 }
 
-/* Увеличенное игровое поле */
 body.is-mobile .board-wrap {
     max-width: min(96vw, calc(100dvh - 150px));
-    max-width: min(96vw, calc(100vh - 150px)); /* fallback для старых браузеров */
+    max-width: min(96vw, calc(100vh - 150px));
     padding: 8px;
     border-radius: 16px;
 }
@@ -1345,7 +1339,6 @@ body.is-mobile .board {
     border-radius: 12px;
 }
 
-/* Удобные для тапа кнопки управления */
 body.is-mobile .controls {
     gap: 10px;
 }
@@ -1356,13 +1349,16 @@ body.is-mobile .btn {
     border-radius: 12px;
 }
 
-/* Читаемый размер цифр на фишках */
 body.is-mobile .tile {
     font-size: clamp(18px, 6vw, 34px);
     border-radius: 10px;
 }
 
-/* Мобильная адаптация для статистики 2x2 на очень узких экранах */
+/* ✅ ИСПРАВЛЕНО: Скрываем луну в теме "Ночь" на мобильных устройствах */
+body.is-mobile[data-theme="night"] .app::before {
+    display: none;
+}
+
 @media (max-width: 380px) {
     body.is-mobile .stats {
         grid-template-columns: repeat(2, 1fr);
