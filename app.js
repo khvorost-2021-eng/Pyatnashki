@@ -1,12 +1,14 @@
 "use strict";
 
+// ========== КОНФИГ ДЛЯ ТЕСТА ==========
+const UNLOCK_ALL_SKINS = true;
+
 // ========== YANDEX SDK STATE ==========
 let ysdk = null;
 let player = null;
 let lb = null;
 let isLocal = true;
 
-// Имя лидерборда БЕЗ подчёркиваний (требование Yandex Games SDK)
 const LEADERBOARD_NAME = 'fifteenpuzzle';
 
 // ========== GAME STATE ==========
@@ -23,6 +25,7 @@ const state = {
     _wasTimerRunning: false, _wasMusicPlaying: false, _isPaused: false
 };
 
+// Используем nameKey для динамического перевода
 const SKINS = {
     standard:    { nameKey: "skinStandard",    requirement: null },
     wood:        { nameKey: "skinWood",        requirement: { type: "wins",  value: 5 } },
@@ -88,7 +91,7 @@ async function getLeaderboardEntries() {
                 quantityTop: 10, quantityAround: 3, includeUser: true
             });
             return res.entries || [];
-        } catch (e) { console.error("LB fetch error:", e); return []; }
+        } catch (e) { return []; }
     }
     return [];
 }
@@ -102,21 +105,6 @@ function showInterstitialAd() {
                 onError: (e) => console.error('Ad error:', e)
             }
         });
-    }
-}
-
-function showRewardedAd(onRewarded) {
-    if (!isLocal && ysdk) {
-        ysdk.adv.showRewardedVideo({
-            callbacks: {
-                onOpen: () => onPause(),
-                onRewarded: () => { if (onRewarded) onRewarded(); },
-                onClose: () => onResume(),
-                onError: (e) => { console.error(e); onResume(); }
-            }
-        });
-    } else if (onRewarded) {
-        onRewarded();
     }
 }
 
@@ -195,17 +183,29 @@ function updateCorrectHighlights() {
     }
 }
 
+// Простая рабочая версия из коммита
 function updateTilePositions() {
     const boardRect = boardEl.getBoundingClientRect();
-    if (boardRect.width === 0) return;
+    if (boardRect.width === 0 || boardRect.height === 0) return;
+    
     const gap = 6;
-    const tileSize = (boardRect.width - gap * (SIZE + 1)) / SIZE;
+    const innerPadding = 4;
+    
+    // Берём минимальный размер, чтобы поле было квадратным
+    const boardSize = Math.min(boardRect.width, boardRect.height);
+    const availableSize = boardSize - innerPadding * 2;
+    const tileSize = (availableSize - gap * (SIZE + 1)) / SIZE;
+    
+    // Центрируем поле внутри board
+    const offsetX = (boardRect.width - boardSize) / 2 + innerPadding;
+    const offsetY = (boardRect.height - boardSize) / 2 + innerPadding;
+    
     for (let i = 0; i < TOTAL; i++) {
         const v = state.board[i];
         if (v === EMPTY) continue;
         const row = Math.floor(i / SIZE), col = i % SIZE;
-        const x = gap + col * (tileSize + gap);
-        const y = gap + row * (tileSize + gap);
+        const x = offsetX + gap + col * (tileSize + gap);
+        const y = offsetY + gap + row * (tileSize + gap);
         const el = tileEls[v];
         el.style.width = tileSize + "px";
         el.style.height = tileSize + "px";
@@ -295,6 +295,17 @@ async function loadRecords() {
     state.currentSkin = data.currentSkin || "standard";
     state.musicEnabled = data.musicEnabled === true;
     state.musicVolume = data.musicVolume != null ? data.musicVolume : 0.3;
+
+    // РАЗБЛОКИРОВКА ВСЕХ СКИНОВ ДЛЯ ТЕСТА
+    if (UNLOCK_ALL_SKINS) {
+        const allSkinIds = Object.keys(SKINS);
+        const hasNewSkins = allSkinIds.some(id => !state.unlockedSkins.includes(id));
+        if (hasNewSkins) {
+            state.unlockedSkins = [...allSkinIds];
+            saveState();
+            console.log('%c[TEST] Все скины разблокированы!', 'color: #2ecc71; font-weight: bold;');
+        }
+    }
 
     applyTheme(state.currentTheme);
     applySkin(state.currentSkin);
