@@ -6,6 +6,9 @@ let player = null;
 let lb = null;
 let isLocal = true;
 
+// Имя лидерборда БЕЗ подчёркиваний (требование Yandex Games SDK)
+const LEADERBOARD_NAME = 'fifteenpuzzle';
+
 // ========== GAME STATE ==========
 const SIZE = 4;
 const TOTAL = SIZE * SIZE;
@@ -17,27 +20,28 @@ const state = {
     bestTime: null, bestMoves: null, wins: 0, gamesPlayed: 0,
     unlockedSkins: ["standard"], currentTheme: "classic", currentSkin: "standard",
     musicEnabled: false, musicVolume: 0.3,
-    _wasTimerRunning: false, _wasMusicPlaying: false, _isPaused: false,
-    _gameStarted: false // Флаг для отслеживания начала сессии (для рекламы)
+    _wasTimerRunning: false, _wasMusicPlaying: false, _isPaused: false
 };
 
 const SKINS = {
-    standard:    { name: t("skinStandard"),  requirement: null },
-    wood:        { name: t("skinWood"),      requirement: { type: "wins",  value: 5 } },
-    gold:        { name: t("skinGold"),      requirement: { type: "wins",  value: 25 } },
-    lightning:   { name: t("skinLightning"), requirement: { type: "time",  value: 120 } },
-    strategist:  { name: t("skinStrategist"),requirement: { type: "moves", value: 30 } },
-    neon:        { name: t("skinNeon"),      requirement: { type: "wins",  value: 50 } },
-    space:       { name: t("skinSpace"),     requirement: { type: "wins",  value: 100 } },
-    rainbow:     { name: t("skinRainbow"),   requirement: { type: "time",  value: 60 } }
+    standard:    { nameKey: "skinStandard",    requirement: null },
+    wood:        { nameKey: "skinWood",        requirement: { type: "wins",  value: 5 } },
+    gold:        { nameKey: "skinGold",        requirement: { type: "wins",  value: 25 } },
+    lightning:   { nameKey: "skinLightning",   requirement: { type: "time",  value: 120 } },
+    strategist:  { nameKey: "skinStrategist",  requirement: { type: "moves", value: 30 } },
+    neon:        { nameKey: "skinNeon",        requirement: { type: "wins",  value: 50 } },
+    space:       { nameKey: "skinSpace",       requirement: { type: "wins",  value: 100 } },
+    rainbow:     { nameKey: "skinRainbow",     requirement: { type: "time",  value: 60 } }
 };
 
 const THEMES = {
-    classic: t("themeClassic"), light: t("themeLight"),
-    night: t("themeNight"), forest: t("themeForest")
+    classic: "themeClassic",
+    light:   "themeLight",
+    night:   "themeNight",
+    forest:  "themeForest"
 };
 
-// ========== CLOUD STORAGE (PlayerData) ==========
+// ========== CLOUD STORAGE ==========
 async function saveToCloud(data) {
     if (!isLocal && player) {
         try { await player.setData(data, true); }
@@ -72,7 +76,7 @@ function saveState() {
 // ========== LEADERBOARD ==========
 async function submitScore(time) {
     if (!isLocal && lb) {
-        try { await lb.setLeaderboardScore('fifteen_puzzle', time); }
+        try { await lb.setLeaderboardScore(LEADERBOARD_NAME, time); }
         catch (e) { console.error("LB submit error:", e); }
     }
 }
@@ -80,7 +84,7 @@ async function submitScore(time) {
 async function getLeaderboardEntries() {
     if (!isLocal && lb) {
         try {
-            const res = await lb.getLeaderboardEntries('fifteen_puzzle', {
+            const res = await lb.getLeaderboardEntries(LEADERBOARD_NAME, {
                 quantityTop: 10, quantityAround: 3, includeUser: true
             });
             return res.entries || [];
@@ -98,6 +102,21 @@ function showInterstitialAd() {
                 onError: (e) => console.error('Ad error:', e)
             }
         });
+    }
+}
+
+function showRewardedAd(onRewarded) {
+    if (!isLocal && ysdk) {
+        ysdk.adv.showRewardedVideo({
+            callbacks: {
+                onOpen: () => onPause(),
+                onRewarded: () => { if (onRewarded) onRewarded(); },
+                onClose: () => onResume(),
+                onError: (e) => { console.error(e); onResume(); }
+            }
+        });
+    } else if (onRewarded) {
+        onRewarded();
     }
 }
 
@@ -164,6 +183,18 @@ function renderBoard() {
     }
     updateTilePositions();
 }
+
+function updateCorrectHighlights() {
+    for (let i = 0; i < TOTAL; i++) {
+        const v = state.board[i];
+        if (v === EMPTY) continue;
+        const el = tileEls[v];
+        if (!el) continue;
+        const isCorrect = (v === i + 1);
+        el.classList.toggle('correct', isCorrect);
+    }
+}
+
 function updateTilePositions() {
     const boardRect = boardEl.getBoundingClientRect();
     if (boardRect.width === 0) return;
@@ -181,7 +212,9 @@ function updateTilePositions() {
         el.style.setProperty("--pos", `translate(${x}px, ${y}px)`);
         el.style.transform = `translate(${x}px, ${y}px)`;
     }
+    updateCorrectHighlights();
 }
+
 function updateStats() {
     document.getElementById("moves").textContent = state.moves;
     document.getElementById("timer").textContent = formatTime(state.time);
@@ -194,8 +227,7 @@ function formatTime(sec) {
 }
 
 function updateShuffleBtnText() {
-    const text = state.hasStarted ? t("startOver") : t("shuffle");
-    shuffleBtn.textContent = text;
+    shuffleBtn.textContent = state.hasStarted ? t("startOver") : t("shuffle");
 }
 
 // ========== INPUT ==========
@@ -298,7 +330,7 @@ function checkUnlocks(time, moves) {
 
         if (unlocked) {
             state.unlockedSkins.push(skinId);
-            newUnlocks.push(skinData.name);
+            newUnlocks.push(t(skinData.nameKey));
         }
     }
     if (newUnlocks.length > 0) saveState();
@@ -441,7 +473,6 @@ function onWin() {
 
     showWinScreen(state.time, state.moves, isNew, unlockedSkins);
 
-    // Interstitial после каждой 3-й игры (не при первом запуске)
     if (state.gamesPlayed > 0 && state.gamesPlayed % 3 === 0) {
         setTimeout(() => showInterstitialAd(), 1500);
     }
@@ -461,8 +492,6 @@ function newGame() {
 // ========== СТАРТОВЫЙ ЭКРАН ==========
 function hideStartScreen() {
     startScreen.classList.add("fade-out");
-    
-    // Запускаем музыку (пользователь совершил жест - autoplay разрешен)
     if (state.musicEnabled) {
         if (!MusicEngine.initialized) {
             MusicEngine.init();
@@ -470,13 +499,12 @@ function hideStartScreen() {
         }
         MusicEngine.start();
     }
-    
     setTimeout(() => { startScreen.remove(); }, 500);
 }
 startBtn.addEventListener("click", hideStartScreen);
 
 // ========== SETTINGS & RECORDS UI ==========
-const settingsRefs = { rendered: false, themeItems: {}, skinItems: {} };
+const settingsRefs = { rendered: false, themeItems: {}, skinItems: {}, langItems: {} };
 
 function showSettings() {
     if (!settingsRefs.rendered) { buildSettingsDOM(); settingsRefs.rendered = true; }
@@ -487,13 +515,13 @@ function showSettings() {
 async function showRecords() {
     recordsScreen.classList.remove("hidden");
     const list = document.getElementById("records-list");
-    list.innerHTML = `<div class="loading-text">${t('loadingRecords') || 'Загрузка...'}</div>`;
+    list.innerHTML = `<div class="loading-text">${t('loadingRecords')}</div>`;
 
     const entries = await getLeaderboardEntries();
     list.innerHTML = "";
 
     if (entries.length === 0) {
-        list.innerHTML = `<div class="no-records">${t('noRecords') || 'Пока нет рекордов. Будьте первым!'}</div>`;
+        list.innerHTML = `<div class="no-records">${t('noRecords')}</div>`;
         return;
     }
 
@@ -506,8 +534,8 @@ async function showRecords() {
         if (entry.user) item.classList.add("is-user");
 
         const name = entry.user
-            ? (entry.user.publicName || entry.user.uniqueName || t('anonymous') || 'Игрок')
-            : (t('anonymous') || 'Игрок');
+            ? (entry.user.publicName || entry.user.uniqueName || t('anonymous'))
+            : t('anonymous');
 
         item.innerHTML = `
             <div class="record-rank">${entry.rank}</div>
@@ -521,13 +549,18 @@ async function showRecords() {
 function buildSettingsDOM() {
     const themeGrid = document.getElementById("theme-grid");
     const skinGrid = document.getElementById("skin-grid");
+    const langGrid = document.getElementById("lang-grid");
     themeGrid.innerHTML = "";
     skinGrid.innerHTML = "";
+    if (langGrid) langGrid.innerHTML = "";
+    settingsRefs.themeItems = {};
+    settingsRefs.skinItems = {};
+    settingsRefs.langItems = {};
 
-    for (const [themeId, themeName] of Object.entries(THEMES)) {
+    for (const [themeId, themeKey] of Object.entries(THEMES)) {
         const item = document.createElement("div");
         item.className = "theme-item";
-        item.innerHTML = `<div class="theme-preview" data-theme="${themeId}"></div><div class="theme-name">${themeName}</div>`;
+        item.innerHTML = `<div class="theme-preview" data-theme="${themeId}"></div><div class="theme-name">${t(themeKey)}</div>`;
         item.addEventListener("click", () => {
             if (state.currentTheme !== themeId) {
                 state.currentTheme = themeId;
@@ -556,7 +589,7 @@ function buildSettingsDOM() {
                 reqHtml = `<div class="skin-requirement">${t("underMoves")} ${req.value} ${t("movesCount")}</div>`;
             }
         }
-        item.innerHTML = `<div class="skin-preview" data-skin="${skinId}">5</div><div class="skin-name">${skinData.name}</div>${reqHtml}`;
+        item.innerHTML = `<div class="skin-preview" data-skin="${skinId}">5</div><div class="skin-name">${t(skinData.nameKey)}</div>${reqHtml}`;
         item.addEventListener("click", () => {
             if (!state.unlockedSkins.includes(skinId)) return;
             if (state.currentSkin !== skinId) {
@@ -568,6 +601,31 @@ function buildSettingsDOM() {
         });
         skinGrid.appendChild(item);
         settingsRefs.skinItems[skinId] = item;
+    }
+
+    if (langGrid) {
+        const languages = [
+            { code: 'ru', label: t('langRu'), flag: '🇷🇺' },
+            { code: 'en', label: t('langEn'), flag: '🇬🇧' }
+        ];
+        languages.forEach(lang => {
+            const item = document.createElement('div');
+            item.className = 'lang-item';
+            item.innerHTML = `<span class="lang-flag">${lang.flag}</span><span class="lang-label">${lang.label}</span>`;
+            item.addEventListener('click', () => {
+                if (currentLang !== lang.code) {
+                    setLanguage(lang.code);
+                    try { localStorage.setItem('puzzle15_lang', lang.code); } catch(e) {}
+                    settingsRefs.rendered = false;
+                    buildSettingsDOM();
+                    refreshSettingsUI();
+                    updateShuffleBtnText();
+                    updateStats();
+                }
+            });
+            langGrid.appendChild(item);
+            settingsRefs.langItems[lang.code] = item;
+        });
     }
 
     const musicToggle = document.getElementById("music-toggle");
@@ -610,6 +668,11 @@ function refreshSettingsUI() {
         item.classList.toggle("active", id === state.currentSkin);
         item.classList.toggle("locked", !isUnlocked);
     }
+    if (settingsRefs.langItems) {
+        for (const [code, item] of Object.entries(settingsRefs.langItems)) {
+            item.classList.toggle("active", code === currentLang);
+        }
+    }
     if (settingsRefs.musicToggle) {
         settingsRefs.musicToggle.classList.toggle("active", state.musicEnabled);
         settingsRefs.volumeControl.classList.toggle("active", state.musicEnabled);
@@ -639,6 +702,15 @@ async function initYSDK() {
         if (typeof YaGames !== 'undefined') {
             ysdk = await YaGames.init();
             isLocal = false;
+
+            try {
+                const i18n = ysdk.environment?.i18n;
+                if (i18n && i18n.lang && LANG[i18n.lang]) {
+                    window.__yandexLang = i18n.lang;
+                    setLanguage(i18n.lang);
+                }
+            } catch (e) {}
+
             try { player = await ysdk.getPlayer(); } catch (e) { console.warn("Player init failed:", e); }
             try { lb = await ysdk.getLeaderboards(); } catch (e) { console.warn("LB init failed:", e); }
 
@@ -655,17 +727,15 @@ async function initYSDK() {
 
 // ========== MAIN INIT ==========
 async function init() {
+    setLanguage(detectLanguage());
     applyLang();
 
     await initYSDK();
     await loadRecords();
 
     MusicEngine._volume = state.musicVolume;
-    
-    // Рендерим игру сразу, чтобы под стартовым экраном было видно пятнашки
     newGame();
 
-    // Привязка UI
     shuffleBtn.addEventListener("click", newGame);
     document.getElementById("play-again-btn").addEventListener("click", newGame);
     document.getElementById("settings-btn").addEventListener("click", showSettings);
@@ -675,7 +745,6 @@ async function init() {
     document.getElementById("records-btn").addEventListener("click", showRecords);
     document.getElementById("records-close-btn").addEventListener("click", () => recordsScreen.classList.add("hidden"));
 
-    // Блокировки браузера
     document.addEventListener("contextmenu", (e) => e.preventDefault());
     document.addEventListener("dragstart", (e) => e.preventDefault());
     let lastTouchEnd = 0;
@@ -685,7 +754,6 @@ async function init() {
         lastTouchEnd = now;
     }, { passive: false });
 
-    // Скрываем экран загрузки, показываем игру со стартовым экраном
     loadingScreen.classList.add("hidden");
 }
 

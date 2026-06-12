@@ -9,13 +9,11 @@
 </head>
 <body>
 
-    <!-- Экран загрузки SDK -->
     <div id="loading-screen">
         <div class="loading-spinner"></div>
         <div class="loading-text" data-lang="loading">Загрузка...</div>
     </div>
 
-    <!-- Основное приложение -->
     <div class="app">
         <div class="header">
             <div class="title" data-lang="title">Пятнашки</div>
@@ -51,19 +49,17 @@
         </div>
     </div>
 
-    <!-- Стартовый экран (поверх игры) -->
     <div id="start-screen" class="start-screen">
         <div class="start-content">
             <div class="start-title" data-lang="title">Пятнашки</div>
-            <div class="start-subtitle">Классическая головоломка</div>
+            <div class="start-subtitle" data-lang="subtitle">Классическая головоломка</div>
             <button id="start-btn" class="start-btn">
-                <span class="btn-text">Начать игру</span>
+                <span class="btn-text" data-lang="startGame">Начать игру</span>
                 <span class="btn-icon">▶</span>
             </button>
         </div>
     </div>
 
-    <!-- Победа -->
     <div id="win-screen" class="win-screen hidden">
         <div class="win-card">
             <div class="win-title" data-lang="winTitle">🎉 Победа!</div>
@@ -78,7 +74,6 @@
         </div>
     </div>
 
-    <!-- Лидерборд -->
     <div id="records-screen" class="records-screen hidden">
         <div class="modal-card">
             <div class="modal-header">
@@ -91,7 +86,6 @@
         </div>
     </div>
 
-    <!-- Настройки -->
     <div id="settings-screen" class="settings-screen hidden">
         <div class="modal-card">
             <div class="modal-header">
@@ -106,6 +100,10 @@
                 <div class="settings-section">
                     <div class="section-title" data-lang="skinsTitle">Скины фишек</div>
                     <div id="skin-grid" class="skin-grid"></div>
+                </div>
+                <div class="settings-section">
+                    <div class="section-title" data-lang="languageTitle">Язык</div>
+                    <div id="lang-grid" class="lang-grid"></div>
                 </div>
                 <div class="settings-section">
                     <div class="section-title" data-lang="musicTitle">Музыка</div>
@@ -125,7 +123,6 @@
         </div>
     </div>
 
-    <!-- Правила -->
     <div id="rules-screen" class="rules-screen hidden">
         <div class="modal-card">
             <div class="modal-header">
