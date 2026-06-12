@@ -8,7 +8,6 @@ let ysdk = null;
 let player = null;
 let lb = null;
 let isLocal = true;
-
 const LEADERBOARD_NAME = 'fifteenpuzzle';
 
 // ========== GAME STATE ==========
@@ -115,7 +114,9 @@ function solvedBoard() {
     b.push(EMPTY);
     return b;
 }
+
 function getEmptyIndex(board) { return board.indexOf(EMPTY); }
+
 function getNeighbors(idx) {
     const r = Math.floor(idx / SIZE), c = idx % SIZE, res = [];
     if (r > 0) res.push(idx - SIZE);
@@ -124,15 +125,18 @@ function getNeighbors(idx) {
     if (c < SIZE - 1) res.push(idx + 1);
     return res;
 }
+
 function isSolved(board) {
     for (let i = 0; i < TOTAL - 1; i++) if (board[i] !== i + 1) return false;
     return board[TOTAL - 1] === EMPTY;
 }
+
 function shuffleBoard() {
     let board = solvedBoard();
     let emptyIdx = getEmptyIndex(board);
     let lastEmpty = -1;
     const STEPS = 300 + Math.floor(Math.random() * 200);
+    
     for (let i = 0; i < STEPS; i++) {
         const neighbors = getNeighbors(emptyIdx).filter(n => n !== lastEmpty);
         const pick = neighbors[Math.floor(Math.random() * neighbors.length)];
@@ -141,10 +145,13 @@ function shuffleBoard() {
         lastEmpty = emptyIdx;
         emptyIdx = pick;
     }
+    
     if (isSolved(board)) return shuffleBoard();
     return board;
 }
+
 function canMove(idx) { return getNeighbors(getEmptyIndex(state.board)).includes(idx); }
+
 function moveTile(idx) {
     if (!canMove(idx)) return false;
     const emptyIdx = getEmptyIndex(state.board);
@@ -183,23 +190,22 @@ function updateCorrectHighlights() {
     }
 }
 
-// Простая рабочая версия из коммита
 function updateTilePositions() {
     const boardRect = boardEl.getBoundingClientRect();
     if (boardRect.width === 0 || boardRect.height === 0) return;
     
     const gap = 6;
     const innerPadding = 4;
-    
+
     // Берём минимальный размер, чтобы поле было квадратным
     const boardSize = Math.min(boardRect.width, boardRect.height);
     const availableSize = boardSize - innerPadding * 2;
     const tileSize = (availableSize - gap * (SIZE + 1)) / SIZE;
-    
+
     // Центрируем поле внутри board
     const offsetX = (boardRect.width - boardSize) / 2 + innerPadding;
     const offsetY = (boardRect.height - boardSize) / 2 + innerPadding;
-    
+
     for (let i = 0; i < TOTAL; i++) {
         const v = state.board[i];
         if (v === EMPTY) continue;
@@ -221,6 +227,7 @@ function updateStats() {
     document.getElementById("best-time").textContent = state.bestTime != null ? formatTime(state.bestTime) : "--:--";
     document.getElementById("best-moves").textContent = state.bestMoves != null ? state.bestMoves : "—";
 }
+
 function formatTime(sec) {
     const m = Math.floor(sec / 60), s = sec % 60;
     return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
@@ -238,12 +245,13 @@ function handleBoardClick(e) {
     const value = parseInt(tile.dataset.value, 10);
     const idx = state.board.indexOf(value);
     if (idx === -1 || !canMove(idx)) return;
-
+    
     if (!state.hasStarted) {
         state.hasStarted = true;
         updateShuffleBtnText();
         startTimer();
     }
+    
     if (moveTile(idx)) {
         state.moves++;
         updateTilePositions();
@@ -251,6 +259,7 @@ function handleBoardClick(e) {
         if (isSolved(state.board)) onWin();
     }
 }
+
 boardEl.addEventListener("click", handleBoardClick);
 window.addEventListener("resize", updateTilePositions);
 
@@ -264,10 +273,12 @@ function startTimer() {
         document.getElementById("timer").textContent = formatTime(state.time);
     }, 250);
 }
+
 function stopTimer() {
     state.isRunning = false;
     if (state.timerId) { clearInterval(state.timerId); state.timerId = null; }
 }
+
 function resetTimer() {
     stopTimer();
     state.time = 0;
@@ -280,6 +291,7 @@ function applyTheme(themeId) {
     document.documentElement.setAttribute("data-theme", themeId);
     document.body.setAttribute("data-theme", themeId);
 }
+
 function applySkin(skinId) {
     document.body.setAttribute("data-skin", skinId);
 }
@@ -295,7 +307,7 @@ async function loadRecords() {
     state.currentSkin = data.currentSkin || "standard";
     state.musicEnabled = data.musicEnabled === true;
     state.musicVolume = data.musicVolume != null ? data.musicVolume : 0.3;
-
+    
     // РАЗБЛОКИРОВКА ВСЕХ СКИНОВ ДЛЯ ТЕСТА
     if (UNLOCK_ALL_SKINS) {
         const allSkinIds = Object.keys(SKINS);
@@ -338,7 +350,7 @@ function checkUnlocks(time, moves) {
         if (req.type === "wins" && state.wins >= req.value) unlocked = true;
         else if (req.type === "time" && time < req.value) unlocked = true;
         else if (req.type === "moves" && moves < req.value) unlocked = true;
-
+        
         if (unlocked) {
             state.unlockedSkins.push(skinId);
             newUnlocks.push(t(skinData.nameKey));
@@ -353,29 +365,35 @@ const MusicEngine = {
     ctx: null, masterGain: null, noteTimer: null, isPlaying: false,
     initialized: false, _volume: 0.3,
     scale: [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25],
+    
     init() {
         if (this.initialized) return;
         try {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
             this.masterGain = this.ctx.createGain();
             this.masterGain.gain.value = 0;
+            
             const delay = this.ctx.createDelay(); delay.delayTime.value = 0.35;
             const feedback = this.ctx.createGain(); feedback.gain.value = 0.35;
             const filter = this.ctx.createBiquadFilter(); filter.type = "lowpass"; filter.frequency.value = 1800;
             const wetGain = this.ctx.createGain(); wetGain.gain.value = 0.45;
+            
             this.masterGain.connect(this.ctx.destination);
             this.masterGain.connect(delay);
             delay.connect(filter); filter.connect(feedback); feedback.connect(delay);
             delay.connect(wetGain); wetGain.connect(this.ctx.destination);
+            
             this.initialized = true;
         } catch (e) { console.warn("Web Audio API недоступен:", e); }
     },
+    
     setVolume(v) {
         this._volume = v;
         if (this.isPlaying && this.masterGain && this.ctx) {
             this.masterGain.gain.linearRampToValueAtTime(v, this.ctx.currentTime + 0.3);
         }
     },
+    
     start() {
         if (this.isPlaying || !this.ctx) return;
         if (this.ctx.state === "suspended") this.ctx.resume();
@@ -384,12 +402,14 @@ const MusicEngine = {
         this.playPad();
         this.scheduleNext();
     },
+    
     stop() {
         if (!this.isPlaying) return;
         this.isPlaying = false;
         if (this.masterGain && this.ctx) this.masterGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 2);
         if (this.noteTimer) { clearTimeout(this.noteTimer); this.noteTimer = null; }
     },
+    
     playPad() {
         if (!this.isPlaying || !this.ctx) return;
         const chordSize = 2 + Math.floor(Math.random() * 2);
@@ -403,6 +423,7 @@ const MusicEngine = {
             if (Math.random() < 0.4) this.playNote(freq / 2, 6 + Math.random() * 2, i * 0.15 + 0.3);
         });
     },
+    
     playNote(freq, duration, delay) {
         if (!this.ctx) return;
         const now = this.ctx.currentTime + delay;
@@ -410,14 +431,17 @@ const MusicEngine = {
         const osc2 = this.ctx.createOscillator(); osc2.type = "triangle"; osc2.frequency.value = freq * 1.003;
         const filter = this.ctx.createBiquadFilter(); filter.type = "lowpass"; filter.frequency.value = 1500; filter.Q.value = 0.7;
         const gain = this.ctx.createGain();
+        
         gain.gain.setValueAtTime(0, now);
         gain.gain.linearRampToValueAtTime(0.12, now + 1.8);
         gain.gain.linearRampToValueAtTime(0.08, now + 2.5);
         gain.gain.linearRampToValueAtTime(0, now + duration);
+        
         osc1.connect(filter); osc2.connect(filter); filter.connect(gain); gain.connect(this.masterGain);
         osc1.start(now); osc2.start(now);
         osc1.stop(now + duration + 0.2); osc2.stop(now + duration + 0.2);
     },
+    
     scheduleNext() {
         if (!this.isPlaying) return;
         const delay = 3500 + Math.random() * 4000;
@@ -439,6 +463,7 @@ function onPause() {
     if (state.isRunning) stopTimer();
     if (state._wasMusicPlaying) MusicEngine.stop();
 }
+
 function onResume() {
     if (!state._isPaused) return;
     state._isPaused = false;
@@ -477,11 +502,10 @@ function onWin() {
     stopTimer();
     state.wins++;
     state.gamesPlayed++;
-
     const isNew = saveRecordIfBetter(state.time, state.moves);
     const unlockedSkins = checkUnlocks(state.time, state.moves);
     saveState();
-
+    
     showWinScreen(state.time, state.moves, isNew, unlockedSkins);
 
     if (state.gamesPlayed > 0 && state.gamesPlayed % 3 === 0) {
@@ -512,6 +536,7 @@ function hideStartScreen() {
     }
     setTimeout(() => { startScreen.remove(); }, 500);
 }
+
 startBtn.addEventListener("click", hideStartScreen);
 
 // ========== SETTINGS & RECORDS UI ==========
@@ -527,7 +552,6 @@ async function showRecords() {
     recordsScreen.classList.remove("hidden");
     const list = document.getElementById("records-list");
     list.innerHTML = `<div class="loading-text">${t('loadingRecords')}</div>`;
-
     const entries = await getLeaderboardEntries();
     list.innerHTML = "";
 
@@ -561,9 +585,11 @@ function buildSettingsDOM() {
     const themeGrid = document.getElementById("theme-grid");
     const skinGrid = document.getElementById("skin-grid");
     const langGrid = document.getElementById("lang-grid");
+    
     themeGrid.innerHTML = "";
     skinGrid.innerHTML = "";
     if (langGrid) langGrid.innerHTML = "";
+    
     settingsRefs.themeItems = {};
     settingsRefs.skinItems = {};
     settingsRefs.langItems = {};
@@ -713,7 +739,7 @@ async function initYSDK() {
         if (typeof YaGames !== 'undefined') {
             ysdk = await YaGames.init();
             isLocal = false;
-
+            
             try {
                 const i18n = ysdk.environment?.i18n;
                 if (i18n && i18n.lang && LANG[i18n.lang]) {
@@ -736,11 +762,30 @@ async function initYSDK() {
     }
 }
 
+// ========== ОПРЕДЕЛЕНИЕ УСТРОЙСТВА ==========
+function detectDevice() {
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isMobile = (
+        /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua.toLowerCase()) ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /macintel/i.test(navigator.platform)) ||
+        (window.innerWidth <= 768 && 'ontouchstart' in window)
+    );
+    
+    document.body.classList.toggle('is-mobile', isMobile);
+    document.body.classList.toggle('is-desktop', !isMobile);
+    
+    // Пересчитать позиции фишек после изменения класса
+    if (typeof updateTilePositions === 'function') {
+        setTimeout(updateTilePositions, 50);
+    }
+}
+
 // ========== MAIN INIT ==========
 async function init() {
     setLanguage(detectLanguage());
     applyLang();
-
+    detectDevice(); // Определение устройства
+    
     await initYSDK();
     await loadRecords();
 
@@ -764,6 +809,18 @@ async function init() {
         if (now - lastTouchEnd <= 300) e.preventDefault();
         lastTouchEnd = now;
     }, { passive: false });
+
+    // Обновление при изменении размера/ориентации
+    window.addEventListener('resize', () => {
+        detectDevice();
+        updateTilePositions();
+    });
+    window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+            detectDevice();
+            updateTilePositions();
+        }, 150);
+    });
 
     loadingScreen.classList.add("hidden");
 }
