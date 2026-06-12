@@ -21,6 +21,7 @@
     --board-bg: rgba(0, 0, 0, 0.25);
     --tile-correct-1: #2ecc71;
     --tile-correct-2: #27ae60;
+    --board-offset: 340px;
 }
 
 /* =============== БРАУЗЕРНОЕ ПОВЕДЕНИЕ =============== */
@@ -350,26 +351,23 @@ body[data-theme="forest"]::after {
 
 /* =============== ИГРОВОЕ ПОЛЕ =============== */
 .board-wrap {
-    flex: 1 1 0%;
+    flex: 0 1 auto;                                    /* НЕ растягивается по высоте */
     width: 100%;
-    max-width: 480px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    max-width: min(480px, calc(100dvh - var(--board-offset)));  /* квадрат, вписанный в экран */
+    aspect-ratio: 1 / 1;                               /* всегда квадрат */
+    margin: auto;                                      /* центрирование внутри flex-контейнера */
     padding: 12px;
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 20px;
     box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.05);
     backdrop-filter: blur(12px);
-    min-height: 0;
-    min-width: 0;
 }
+
 .board {
     position: relative;
+    width: 100%;
     height: 100%;
-    aspect-ratio: 1 / 1;
-    max-width: 100%;
     background: var(--board-bg);
     border-radius: 14px;
     overflow: hidden;
@@ -1117,10 +1115,8 @@ body[data-theme="forest"]::after {
 
 /* =============== МОБИЛЬНАЯ АДАПТАЦИЯ =============== */
 @media (max-width: 768px) {
-    .app {
-        padding: 10px 8px 14px;
-        gap: 8px;
-    }
+    :root { --board-offset: 260px; }   /* интерфейс компактнее → поле больше */
+    .app { padding: 10px 8px 14px; gap: 8px; }
     .header { gap: 6px; }
     .title { font-size: clamp(20px, 5vw, 26px); }
     .header-buttons { gap: 6px; }
@@ -1130,10 +1126,7 @@ body[data-theme="forest"]::after {
     .stat-label { font-size: 8px; }
     .stat-value { font-size: clamp(12px, 3.5vw, 15px); }
     
-    .board-wrap {
-        padding: 8px;
-        border-radius: 16px;
-    }
+    .board-wrap { padding: 8px; border-radius: 16px; }
     .board { border-radius: 10px; }
     
     .controls { gap: 8px; }
@@ -1141,6 +1134,7 @@ body[data-theme="forest"]::after {
 }
 
 @media (max-width: 768px) and (max-height: 700px) {
+    :root { --board-offset: 220px; }
     .app { padding: 8px 6px 10px; gap: 6px; }
     .header { gap: 4px; }
     .title { font-size: 18px; }
@@ -1155,6 +1149,7 @@ body[data-theme="forest"]::after {
 }
 
 @media (max-width: 768px) and (max-height: 550px) {
+    :root { --board-offset: 180px; }
     .app { padding: 6px 5px 8px; gap: 4px; }
     .title { font-size: 16px; }
     .header-buttons { gap: 4px; }
