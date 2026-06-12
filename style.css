@@ -151,10 +151,7 @@ html[data-theme="forest"], body[data-theme="forest"] {
     max-width: 480px;
     max-height: calc(100dvh - 340px);
     aspect-ratio: 1 / 1;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 12px;
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 20px;
@@ -167,9 +164,6 @@ html[data-theme="forest"], body[data-theme="forest"] {
     position: relative;
     width: 100%;
     height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    aspect-ratio: 1 / 1;
     background: var(--board-bg);
     border-radius: 14px;
     overflow: hidden;
@@ -538,4 +532,88 @@ html[data-theme="forest"], body[data-theme="forest"] {
     .title { font-size: 24px; }
     .stats { padding: 8px; }
     .btn { padding: 10px 22px; font-size: 14px; }
+}
+
+/* =============== МОБИЛЬНАЯ АДАПТАЦИЯ (ТОЛЬКО ТЕЛЕФОНЫ) =============== */
+
+/* Все мобильные устройства */
+@media (max-width: 768px) {
+    .app {
+        padding: 14px 12px 20px;
+        gap: 12px;
+    }
+    .header { gap: 10px; }
+    .title { font-size: clamp(22px, 6vw, 30px); }
+    .header-buttons { gap: 8px; }
+    .text-btn { padding: 9px 14px; font-size: 13px; gap: 6px; }
+    .btn-icon { font-size: 15px; }
+    .stats { padding: 8px; gap: 6px; }
+    .stat-label { font-size: 9px; }
+    .stat-value { font-size: clamp(13px, 4vw, 17px); }
+    .board-wrap {
+        max-height: calc(100dvh - 280px);
+        padding: 10px;
+    }
+    .btn { padding: 11px 24px; font-size: 14px; }
+}
+
+/* Планшеты и большие телефоны в портрете */
+@media (max-height: 750px) and (max-width: 768px) {
+    .app { padding: 12px 10px 16px; gap: 10px; }
+    .header { gap: 8px; }
+    .title { font-size: 22px; }
+    .stats { padding: 7px; }
+    .board-wrap {
+        max-height: calc(100dvh - 250px);
+        padding: 8px;
+    }
+    .btn { padding: 10px 20px; font-size: 13px; }
+}
+
+/* Компактные телефоны (iPhone SE, Galaxy A и т.д.) */
+@media (max-height: 650px) and (max-width: 768px) {
+    .app { padding: 10px 8px 14px; gap: 8px; }
+    .header { gap: 6px; }
+    .title { font-size: 20px; }
+    .text-btn { padding: 8px 12px; font-size: 12px; }
+    .stats { padding: 6px; gap: 4px; }
+    .stat { padding: 2px; }
+    .stat-label { font-size: 8px; letter-spacing: 0.3px; }
+    .stat-value { font-size: 13px; }
+    .board-wrap {
+        max-height: calc(100dvh - 220px);
+        padding: 6px;
+        border-radius: 16px;
+    }
+    .board { border-radius: 12px; }
+    .btn { padding: 9px 18px; font-size: 13px; }
+}
+
+/* Очень маленькие экраны (альбомная ориентация на телефоне, старые устройства) */
+@media (max-height: 550px) and (max-width: 768px) {
+    .app { padding: 8px 8px 10px; gap: 6px; }
+    .header { gap: 4px; }
+    .title { font-size: 18px; }
+    .header-buttons { gap: 6px; }
+    .text-btn { padding: 6px 10px; font-size: 11px; }
+    .stats { padding: 5px; gap: 3px; }
+    .stat-label { font-size: 7px; }
+    .stat-value { font-size: 12px; }
+    .board-wrap {
+        max-height: calc(100dvh - 180px);
+        padding: 5px;
+    }
+    .btn { padding: 8px 16px; font-size: 12px; }
+}
+
+/* Экстремально маленькие экраны */
+@media (max-height: 450px) and (max-width: 768px) {
+    .app { padding: 6px 6px 8px; gap: 4px; }
+    .title { font-size: 16px; }
+    .stats { padding: 4px; }
+    .board-wrap {
+        max-height: calc(100dvh - 150px);
+        padding: 4px;
+    }
+    .controls { gap: 8px; }
 }
