@@ -1,0 +1,59 @@
+/* =============== СБРОС =============== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --bg-1: #0f1226;
+  --bg-2: #1a1f3a;
+  --panel: rgba(255, 255, 255, 0.05);
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --text: #eef1ff;
+  --text-dim: #8a92b8;
+  --accent: #6c5ce7;
+  --accent-2: #00d2ff;
+  --tile-grad-1: #6c5ce7;
+  --tile-grad-2: #a29bfe;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --board-bg: rgba(0, 0, 0, 0.25);
+  --tile-correct-1: #2ecc71;
+  --tile-correct-2: #27ae60;
+  --board-offset: 340px;
+}
+
+/* =============== БРАУЗЕРНОЕ ПОВЕДЕНИЕ =============== */
+html, body {
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  -webkit-overflow-scrolling: none;
+  touch-action: none !important;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  transition: color 300ms;
+  position: fixed;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.tile, .btn, .text-btn, .icon-btn,
+.theme-item, .skin-item, .lang-item,
+.toggle-btn, .volume-slider,
+.start-btn, .close-btn,
+.board-wrap, .board,
+.record-item, .control-item {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ✅ УБРАНО: user-select: text для модалок — теперь текст нигде не выделяется */

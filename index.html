@@ -2,156 +2,221 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Пятнашки</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="/sdk.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#6c5ce7">
+    <title>Пятнашки Pro</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/board.css">
+    <link rel="stylesheet" href="css/skins.css">
+    <link rel="stylesheet" href="css/modals.css">
+    <link rel="stylesheet" href="css/leaderboard.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/music.css">
+    <link rel="stylesheet" href="css/rules.css">
+    <link rel="stylesheet" href="css/win.css">
+    <link rel="stylesheet" href="css/loading.css">
+    <link rel="stylesheet" href="css/start.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <script src="https://yandex.ru/games/sdk/v2"></script>
 </head>
 <body>
-
-    <div id="loading-screen">
-        <div class="loading-spinner"></div>
-        <div class="loading-text" data-lang="loading">Загрузка...</div>
-    </div>
-
-    <div class="app">
-        <div class="header">
-            <div class="title" data-lang="title">Пятнашки</div>
-            <div class="header-buttons">
-                <button class="text-btn" id="records-btn">
-                    <span class="btn-icon">🏆</span>
-                    <span class="btn-text" data-lang="records">Рекорды</span>
-                </button>
-                <button class="text-btn" id="rules-btn">
-                    <span class="btn-icon">?</span>
-                    <span class="btn-text" data-lang="rules">Правила</span>
-                </button>
-                <button class="text-btn" id="settings-btn">
-                    <span class="btn-icon">⚙</span>
-                    <span class="btn-text" data-lang="settings">Настройки</span>
-                </button>
+    <div class="game-container">
+        <div class="app">
+            <!-- Экран загрузки -->
+            <div id="loading-screen">
+                <div class="loading-spinner"></div>
+                <div class="loading-text" data-lang="loading">Загрузка...</div>
             </div>
-        </div>
 
-        <div class="stats">
-            <div class="stat"><div class="stat-label" data-lang="time">Время</div><div class="stat-value" id="timer">00:00</div></div>
-            <div class="stat"><div class="stat-label" data-lang="moves">Ходы</div><div class="stat-value" id="moves">0</div></div>
-            <div class="stat"><div class="stat-label" data-lang="bestTime">Рекорд</div><div class="stat-value" id="best-time">--:--</div></div>
-            <div class="stat"><div class="stat-label" data-lang="bestMoves">Мин. ходов</div><div class="stat-value" id="best-moves">—</div></div>
-        </div>
-
-        <div class="board-wrap">
-            <div id="board" class="board"></div>
-        </div>
-
-        <div class="controls">
-            <button class="btn" id="shuffle-btn" data-lang="shuffle">Перемешать</button>
-        </div>
-    </div>
-
-    <div id="start-screen" class="start-screen">
-        <div class="start-content">
-            <div class="start-title" data-lang="title">Пятнашки</div>
-            <div class="start-subtitle" data-lang="subtitle">Классическая головоломка</div>
-            <button id="start-btn" class="start-btn">
-                <span class="btn-text" data-lang="startGame">Начать игру</span>
-                <span class="btn-icon">▶</span>
-            </button>
-        </div>
-    </div>
-
-    <div id="win-screen" class="win-screen hidden">
-        <div class="win-card">
-            <div class="win-title" data-lang="winTitle">🎉 Победа!</div>
-            <div class="win-text" data-lang="winText">Вы собрали пятнашки!</div>
-            <div class="win-stats">
-                <div class="win-stat"><span data-lang="yourTime">Ваше время</span><strong id="win-time">00:00</strong></div>
-                <div class="win-stat"><span data-lang="yourMoves">Ваши ходы</span><strong id="win-moves">0</strong></div>
-            </div>
-            <div id="win-record" class="win-record hidden" data-lang="newRecord">🏆 Новый рекорд!</div>
-            <div id="win-unlocks" class="win-unlocks hidden"></div>
-            <button class="btn" id="play-again-btn" data-lang="playAgain">Играть снова</button>
-        </div>
-    </div>
-
-    <div id="records-screen" class="records-screen hidden">
-        <div class="modal-card">
-            <div class="modal-header">
-                <div class="modal-title" data-lang="recordsTitle">Таблица лидеров</div>
-                <button class="icon-btn close-btn" id="records-close-btn">×</button>
-            </div>
-            <div class="modal-content">
-                <div id="records-list" class="records-list"></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="settings-screen" class="settings-screen hidden">
-        <div class="modal-card">
-            <div class="modal-header">
-                <div class="modal-title" data-lang="settingsTitle">Настройки</div>
-                <button class="icon-btn close-btn" id="settings-close-btn">×</button>
-            </div>
-            <div class="modal-content">
-                <div class="settings-section">
-                    <div class="section-title" data-lang="themesTitle">Тема</div>
-                    <div id="theme-grid" class="theme-grid"></div>
+            <!-- Стартовый экран -->
+            <div id="start-screen" class="start-screen">
+                <div class="start-content">
+                    <h1 class="start-title" data-lang="title">Пятнашки Pro</h1>
+                    <p class="start-subtitle" data-lang="subtitle">Классическая головоломка</p>
+                    <button id="start-btn" class="start-btn">
+                        <span data-lang="startGame">Начать игру</span>
+                        <span class="btn-icon">▶</span>
+                    </button>
                 </div>
-                <div class="settings-section">
-                    <div class="section-title" data-lang="skinsTitle">Скины фишек</div>
-                    <div id="skin-grid" class="skin-grid"></div>
+            </div>
+
+            <!-- Header -->
+            <div class="header">
+                <h1 class="title" data-lang="title">Пятнашки Pro</h1>
+                <div class="header-buttons">
+                    <button id="records-btn" class="text-btn">
+                        <span class="btn-icon">🏆</span>
+                        <span class="btn-text" data-lang="records">Рекорды</span>
+                    </button>
+                    <button id="rules-btn" class="text-btn">
+                        <span class="btn-icon">?</span>
+                        <span class="btn-text" data-lang="rules">Правила</span>
+                    </button>
+                    <button id="settings-btn" class="text-btn">
+                        <span class="btn-icon">⚙</span>
+                        <span class="btn-text" data-lang="settings">Настройки</span>
+                    </button>
                 </div>
-                <div class="settings-section">
-                    <div class="section-title" data-lang="languageTitle">Язык</div>
-                    <div id="lang-grid" class="lang-grid"></div>
+            </div>
+
+            <!-- Статистика -->
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-label" data-lang="time">Время</span>
+                    <span class="stat-value" id="timer">00:00</span>
                 </div>
-                <div class="settings-section">
-                    <div class="section-title" data-lang="musicTitle">Музыка</div>
-                    <div class="music-controls">
-                        <div class="music-toggle">
-                            <span class="music-label" data-lang="musicEnabled">Фоновая музыка</span>
-                            <button class="toggle-btn" id="music-toggle"><span class="toggle-track"><span class="toggle-thumb"></span></span></button>
+                <div class="stat">
+                    <span class="stat-label" data-lang="moves">Ходы</span>
+                    <span class="stat-value" id="moves">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label" data-lang="bestTime">Рекорд</span>
+                    <span class="stat-value" id="best-time">--:--</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label" data-lang="bestMoves">Мин. ходов</span>
+                    <span class="stat-value" id="best-moves">—</span>
+                </div>
+            </div>
+
+            <!-- Игровое поле -->
+            <div class="board-wrap">
+                <div class="board" id="board"></div>
+            </div>
+
+            <!-- Кнопки -->
+            <div class="controls">
+                <button id="shuffle-btn" class="btn" data-lang="shuffle">Перемешать</button>
+            </div>
+
+            <!-- Экран победы -->
+            <div id="win-screen" class="win-screen hidden">
+                <div class="win-card">
+                    <h2 class="win-title" data-lang="winTitle">🎉 Победа!</h2>
+                    <p class="win-text" data-lang="winText">Вы собрали пятнашки!</p>
+                    <div class="win-stats">
+                        <div class="win-stat">
+                            <span data-lang="yourTime">Ваше время</span>
+                            <strong id="win-time">00:00</strong>
                         </div>
-                        <div class="volume-control" id="volume-control">
-                            <span class="volume-icon">🔊</span>
-                            <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="30">
-                            <span class="volume-value" id="volume-value">30%</span>
+                        <div class="win-stat">
+                            <span data-lang="yourMoves">Ваши ходы</span>
+                            <strong id="win-moves">0</strong>
                         </div>
                     </div>
+                    <div id="win-record" class="win-record hidden" data-lang="newRecord">🏆 Новый рекорд!</div>
+                    <div id="win-unlocks" class="win-unlocks hidden"></div>
+                    <button id="play-again-btn" class="btn" data-lang="playAgain">Играть снова</button>
+                </div>
+            </div>
+
+            <!-- Рекорды -->
+            <div id="records-screen" class="records-screen hidden">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2 class="modal-title" data-lang="recordsTitle">Таблица лидеров</h2>
+                        <button id="records-close-btn" class="close-btn">×</button>
+                    </div>
+                    <div class="modal-content">
+                        <div id="records-list" class="records-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Настройки -->
+            <div id="settings-screen" class="settings-screen hidden">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2 class="modal-title" data-lang="settingsTitle">Настройки</h2>
+                        <button id="settings-close-btn" class="close-btn">×</button>
+                    </div>
+                    <div class="modal-content">
+                        <div class="settings-section">
+                            <h3 class="section-title" data-lang="themesTitle">Тема</h3>
+                            <div id="theme-grid" class="theme-grid"></div>
+                        </div>
+                        <div class="settings-section">
+                            <h3 class="section-title" data-lang="skinsTitle">Скины фишек</h3>
+                            <div id="skin-grid" class="skin-grid"></div>
+                        </div>
+                        <div class="settings-section">
+                            <h3 class="section-title" data-lang="languageTitle">Язык</h3>
+                            <div id="lang-grid" class="lang-grid"></div>
+                        </div>
+                        <div class="settings-section">
+                            <h3 class="section-title" data-lang="musicTitle">Музыка</h3>
+                            <div class="music-controls">
+                                <div class="music-toggle">
+                                    <span class="music-label" data-lang="musicEnabled">Фоновая музыка</span>
+                                    <button id="music-toggle" class="toggle-btn">
+                                        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    </button>
+                                </div>
+                                <div id="volume-control" class="volume-control">
+                                    <span class="volume-icon">🔊</span>
+                                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="30">
+                                    <span id="volume-value" class="volume-value">30%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правила -->
+            <div id="rules-screen" class="rules-screen hidden">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <h2 class="modal-title" data-lang="rulesTitle">Правила</h2>
+                        <button id="rules-close-btn" class="close-btn">×</button>
+                    </div>
+                    <div class="modal-content">
+                        <div class="rules-section">
+                            <h3 class="rules-subtitle" data-lang="rulesGoal">Цель игры</h3>
+                            <p class="rules-text" data-lang="rulesText">Расставьте числа от 1 до 15 по порядку. Нажимайте на фишки рядом с пустой клеткой.</p>
+                        </div>
+                        <div class="rules-demo">
+                            <div class="demo-title" data-lang="correctPosition">Правильная расстановка:</div>
+                            <div id="demo-board" class="demo-board"></div>
+                        </div>
+                        <div class="rules-section">
+                            <h3 class="rules-subtitle" data-lang="howToPlay">Как играть</h3>
+                            <div class="controls-info">
+                                <div class="control-item">
+                                    <span class="control-icon">👆</span>
+                                    <span class="control-text" data-lang="controlTapDesc">Нажимайте на фишку рядом с пустой клеткой</span>
+                                </div>
+                                <div class="control-item info">
+                                    <span class="control-icon">🎯</span>
+                                    <span class="control-text" data-lang="controlTip">Собирайте ряды сверху вниз</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="rules-screen" class="rules-screen hidden">
-        <div class="modal-card">
-            <div class="modal-header">
-                <div class="modal-title" data-lang="rulesTitle">Правила</div>
-                <button class="icon-btn close-btn" id="rules-close-btn">×</button>
-            </div>
-            <div class="modal-content">
-                <div class="rules-section">
-                    <div class="rules-subtitle" data-lang="rulesGoal">Цель игры</div>
-                    <div class="rules-text" data-lang="rulesText">Расставьте числа от 1 до 15 по порядку. Нажимайте на фишки рядом с пустой клеткой. Пустая клетка должна быть в правом нижнем углу.</div>
-                </div>
-                <div class="rules-section">
-                    <div class="rules-subtitle" data-lang="correctPosition">Правильная расстановка:</div>
-                    <div class="rules-demo">
-                        <div id="demo-board" class="demo-board"></div>
-                    </div>
-                </div>
-                <div class="rules-section">
-                    <div class="rules-subtitle" data-lang="howToPlay">Как играть</div>
-                    <div class="controls-info">
-                        <div class="control-item"><span class="control-icon">👆</span><span class="control-text" data-lang="controlTapDesc">Нажимайте на фишку, расположенную рядом с пустой клеткой — она переместится на свободное место</span></div>
-                        <div class="control-item info"><span class="control-icon">🎯</span><span class="control-text" data-lang="controlTip">Двигайте фишки по одной, постепенно собирая ряды сверху вниз</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
     <script src="lang.js"></script>
-    <script src="app.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/board.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/unlocks.js"></script>
+    <script src="js/music.js"></script>
+    <script src="js/pause.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/sdk.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

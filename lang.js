@@ -1,29 +1,25 @@
 const LANG = {
     ru: {
-        title: "Пятнашки",
+        title: "Пятнашки Pro",
         subtitle: "Классическая головоломка",
         loading: "Загрузка...",
         startGame: "Начать игру",
-
         time: "Время",
         moves: "Ходы",
         bestTime: "Рекорд",
         bestMoves: "Мин. ходов",
-
         shuffle: "Перемешать",
         startOver: "Начать заново",
         settings: "Настройки",
         rules: "Правила",
         records: "Рекорды",
         playAgain: "Играть снова",
-
         winTitle: "🎉 Победа!",
         winText: "Вы собрали пятнашки!",
         yourTime: "Ваше время",
         yourMoves: "Ваши ходы",
         newRecord: "🏆 Новый рекорд!",
         newSkinUnlocked: "🎁 Новый скин открыт:",
-
         settingsTitle: "Настройки",
         themesTitle: "Тема",
         skinsTitle: "Скины фишек",
@@ -34,7 +30,6 @@ const LANG = {
         noRecords: "Пока нет рекордов. Будьте первым!",
         loadingRecords: "Загрузка...",
         anonymous: "Игрок",
-
         rulesTitle: "Правила",
         rulesGoal: "Цель игры",
         rulesText: "Расставьте числа от 1 до 15 по порядку. Нажимайте на фишки рядом с пустой клеткой. Пустая клетка должна быть в правом нижнем углу.",
@@ -42,12 +37,10 @@ const LANG = {
         howToPlay: "Как играть",
         controlTapDesc: "Нажимайте на фишку, расположенную рядом с пустой клеткой — она переместится на свободное место",
         controlTip: "Двигайте фишки по одной, постепенно собирая ряды сверху вниз",
-
         themeClassic: "Классическая",
         themeLight: "Светлая",
         themeNight: "Ночь",
         themeForest: "Лес",
-
         skinStandard: "Стандартный",
         skinWood: "Деревянный",
         skinGold: "Золотой",
@@ -56,7 +49,6 @@ const LANG = {
         skinNeon: "Неон",
         skinSpace: "Космос",
         skinRainbow: "Радужный",
-
         unlockedAfter: "После",
         wins: "побед",
         win: "победы",
@@ -65,36 +57,30 @@ const LANG = {
         minutes: "минут",
         minute: "минуты",
         movesCount: "ходов",
-
         langRu: "Русский",
         langEn: "English"
     },
-
     en: {
-        title: "15 Puzzle",
+        title: "15 Puzzle Pro",
         subtitle: "Classic sliding puzzle",
         loading: "Loading...",
         startGame: "Start Game",
-
         time: "Time",
         moves: "Moves",
         bestTime: "Best",
         bestMoves: "Min. moves",
-
         shuffle: "Shuffle",
         startOver: "Start Over",
         settings: "Settings",
         rules: "Rules",
         records: "Records",
         playAgain: "Play Again",
-
         winTitle: "🎉 You Win!",
         winText: "You solved the puzzle!",
         yourTime: "Your time",
         yourMoves: "Your moves",
         newRecord: "🏆 New Record!",
         newSkinUnlocked: "🎁 New skin unlocked:",
-
         settingsTitle: "Settings",
         themesTitle: "Theme",
         skinsTitle: "Tile Skins",
@@ -105,7 +91,6 @@ const LANG = {
         noRecords: "No records yet. Be the first!",
         loadingRecords: "Loading...",
         anonymous: "Player",
-
         rulesTitle: "Rules",
         rulesGoal: "Goal",
         rulesText: "Arrange the numbers from 1 to 15 in order. Tap tiles next to the empty space to move them. The empty space should end up in the bottom-right corner.",
@@ -113,12 +98,10 @@ const LANG = {
         howToPlay: "How to play",
         controlTapDesc: "Tap a tile next to the empty space — it will slide into the free spot",
         controlTip: "Move tiles one by one, solving the rows from top to bottom",
-
         themeClassic: "Classic",
         themeLight: "Light",
         themeNight: "Night",
         themeForest: "Forest",
-
         skinStandard: "Standard",
         skinWood: "Wooden",
         skinGold: "Golden",
@@ -127,7 +110,6 @@ const LANG = {
         skinNeon: "Neon",
         skinSpace: "Space",
         skinRainbow: "Rainbow",
-
         unlockedAfter: "After",
         wins: "wins",
         win: "win",
@@ -136,7 +118,6 @@ const LANG = {
         minutes: "minutes",
         minute: "minute",
         movesCount: "moves",
-
         langRu: "Русский",
         langEn: "English"
     }
@@ -173,11 +154,8 @@ function detectLanguage() {
         const saved = localStorage.getItem('puzzle15_lang');
         if (saved && LANG[saved]) return saved;
     } catch (e) {}
-
     if (window.__yandexLang && LANG[window.__yandexLang]) return window.__yandexLang;
-
     const browserLang = (navigator.language || navigator.userLanguage || 'ru').slice(0, 2).toLowerCase();
     if (LANG[browserLang]) return browserLang;
-
     return 'ru';
 }

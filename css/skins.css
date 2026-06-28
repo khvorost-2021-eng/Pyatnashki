@@ -1,0 +1,158 @@
+/* =============== ПРАВИЛЬНЫЕ ФИШКИ В СКИНАХ =============== */
+[data-skin="wood"] .tile.correct,
+[data-skin="gold"] .tile.correct,
+[data-skin="strategist"] .tile.correct,
+[data-skin="space"] .tile.correct,
+[data-skin="rainbow"] .tile.correct {
+  background: linear-gradient(135deg, var(--tile-correct-1), var(--tile-correct-2)) !important;
+  color: #fff !important;
+  animation: none !important;
+  filter: none !important;
+}
+
+[data-skin="lightning"] .tile.correct {
+  background: linear-gradient(135deg, var(--tile-correct-1), var(--tile-correct-2)) !important;
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+[data-skin="neon"] .tile.correct {
+  background: linear-gradient(135deg, var(--tile-correct-1), var(--tile-correct-2)) !important;
+  color: #fff !important;
+  text-shadow: 0 0 10px rgba(46, 204, 113, 0.8);
+}
+
+[data-skin="space"] .tile.correct::before {
+  background:
+    radial-gradient(1px 1px at 20% 25%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.5), transparent) !important;
+}
+
+/* =============== СКИНЫ =============== */
+[data-skin="wood"] .tile {
+  background:
+    repeating-linear-gradient(90deg, rgba(139,111,71,0.3) 0 2px, transparent 2px 8px),
+    linear-gradient(135deg, #8b6f47, #a0826d);
+  box-shadow: 0 6px 16px rgba(139,111,71,0.4), inset 0 2px 4px rgba(255,255,255,0.15);
+}
+
+[data-skin="gold"] .tile {
+  background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+  color: #8b6914;
+  box-shadow: 0 6px 20px rgba(255,215,0,0.5), inset 0 2px 4px rgba(255,255,255,0.5);
+}
+
+[data-skin="lightning"] .tile {
+  background: linear-gradient(135deg, #ffeb3b, #ff9800);
+  box-shadow: 0 0 20px rgba(255,235,59,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+[data-skin="strategist"] .tile {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  box-shadow: 0 6px 16px rgba(44,62,80,0.5), inset 0 2px 4px rgba(255,255,255,0.1);
+}
+
+[data-skin="neon"] .tile {
+  background: linear-gradient(135deg, #00ff88, #00d4ff);
+  color: #0a0e27;
+  box-shadow: 0 0 25px rgba(0,255,136,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+  text-shadow: 0 0 10px rgba(0,255,136,0.8);
+}
+
+[data-skin="space"] .tile {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  box-shadow: 0 6px 20px rgba(26,26,46,0.6), inset 0 2px 8px rgba(100,150,255,0.3);
+}
+
+[data-skin="space"] .tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 20% 25%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 60%, #fff, transparent),
+    radial-gradient(1px 1px at 50% 80%, #fff, transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* =============== ✅ РАДУЖНЫЙ СКИН — ПЛАВНАЯ АНИМАЦИЯ БЕЗ СКАЧКОВ =============== */
+[data-skin="rainbow"] .tile {
+  background: linear-gradient(135deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff, #ff0088);
+  box-shadow: 0 6px 20px rgba(255,0,136,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  animation: rainbow-hue 3s linear infinite;
+}
+
+@keyframes rainbow-hue {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
+}
+
+/* =============== ПРЕВЬЮ СКИНОВ В НАСТРОЙКАХ =============== */
+.skin-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.skin-preview[data-skin="standard"] {
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  box-shadow: 0 4px 12px rgba(108,92,231,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+}
+
+.skin-preview[data-skin="wood"] {
+  background:
+    repeating-linear-gradient(90deg, rgba(139,111,71,0.3) 0 2px, transparent 2px 8px),
+    linear-gradient(135deg, #8b6f47, #a0826d);
+  box-shadow: 0 4px 12px rgba(139,111,71,0.4), inset 0 2px 4px rgba(255,255,255,0.15);
+}
+
+.skin-preview[data-skin="gold"] {
+  background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+  color: #8b6914;
+  box-shadow: 0 4px 14px rgba(255,215,0,0.5), inset 0 2px 4px rgba(255,255,255,0.5);
+}
+
+.skin-preview[data-skin="lightning"] {
+  background: linear-gradient(135deg, #ffeb3b, #ff9800);
+  box-shadow: 0 0 16px rgba(255,235,59,0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.skin-preview[data-skin="strategist"] {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  box-shadow: 0 4px 12px rgba(44,62,80,0.5), inset 0 2px 4px rgba(255,255,255,0.1);
+}
+
+.skin-preview[data-skin="neon"] {
+  background: linear-gradient(135deg, #00ff88, #00d4ff);
+  color: #0a0e27;
+  box-shadow: 0 0 18px rgba(0,255,136,0.7), inset 0 1px 0 rgba(255,255,255,0.4);
+  text-shadow: 0 0 8px rgba(0,255,136,0.8);
+}
+
+.skin-preview[data-skin="space"] {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  box-shadow: 0 4px 14px rgba(26,26,46,0.6), inset 0 2px 8px rgba(100,150,255,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.skin-preview[data-skin="space"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 25% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 65% 55%, #fff, transparent),
+    radial-gradient(1px 1px at 45% 75%, #fff, transparent);
+  pointer-events: none;
+}
+
+.skin-preview[data-skin="rainbow"] {
+  background: linear-gradient(135deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff, #ff0088);
+  box-shadow: 0 4px 14px rgba(255,0,136,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  animation: rainbow-hue 3s linear infinite;
+}

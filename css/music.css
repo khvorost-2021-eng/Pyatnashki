@@ -1,0 +1,104 @@
+/* =============== МУЗЫКА =============== */
+.music-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+}
+
+.music-toggle { display: flex; justify-content: space-between; align-items: center; }
+.music-label { font-size: 15px; font-weight: 600; }
+
+.toggle-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 52px;
+    height: 28px;
+}
+
+.toggle-track {
+    display: block;
+    width: 52px;
+    height: 28px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 14px;
+    position: relative;
+    transition: background 200ms;
+    border: 1px solid var(--panel-border);
+}
+
+.toggle-btn.active .toggle-track { background: var(--accent); border-color: var(--accent); }
+
+.toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 200ms;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.toggle-btn.active .toggle-thumb { transform: translateX(24px); }
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 200ms;
+}
+
+.volume-control.active { opacity: 1; pointer-events: auto; }
+.volume-icon { font-size: 20px; flex-shrink: 0; }
+
+.volume-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(108,92,231,0.5);
+    transition: transform 150ms;
+}
+
+.volume-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+.volume-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(108,92,231,0.5);
+}
+
+.volume-value {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: right;
+    color: var(--text-dim);
+}

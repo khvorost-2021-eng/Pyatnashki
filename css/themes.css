@@ -1,0 +1,163 @@
+/* =============== КЛАССИЧЕСКАЯ =============== */
+[data-theme="classic"] {
+  --bg-1: #0f1226;
+  --bg-2: #1a1f3a;
+  --panel: rgba(255, 255, 255, 0.05);
+  --panel-border: rgba(255, 255, 255, 0.1);
+  --text: #eef1ff;
+  --text-dim: #8a92b8;
+  --board-bg: rgba(0, 0, 0, 0.35);
+  --tile-correct-1: #2ecc71;
+  --tile-correct-2: #27ae60;
+}
+
+html[data-theme="classic"], body[data-theme="classic"] {
+  background:
+    repeating-linear-gradient(45deg, rgba(108,92,231,0.04) 0 2px, transparent 2px 20px),
+    repeating-linear-gradient(-45deg, rgba(0,210,255,0.03) 0 2px, transparent 2px 24px),
+    radial-gradient(1200px 800px at 20% 0%, #2a2158 0%, transparent 60%),
+    radial-gradient(1000px 700px at 100% 100%, #0a3a5a 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  background-attachment: fixed;
+}
+
+/* =============== СВЕТЛАЯ =============== */
+[data-theme="light"] {
+  --bg-1: #f5f7fa;
+  --bg-2: #e8ecf1;
+  --panel: rgba(0, 0, 0, 0.04);
+  --panel-border: rgba(0, 0, 0, 0.08);
+  --text: #1a1f3a;
+  --text-dim: #5a6378;
+  --board-bg: rgba(0, 0, 0, 0.08);
+  --tile-correct-1: #16a085;
+  --tile-correct-2: #1abc9c;
+}
+
+html[data-theme="light"], body[data-theme="light"] {
+  background:
+    radial-gradient(ellipse 400px 200px at 15% 20%, rgba(108,92,231,0.08), transparent 70%),
+    radial-gradient(ellipse 350px 180px at 85% 35%, rgba(0,210,255,0.1), transparent 70%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  background-attachment: fixed;
+}
+
+/* =============== НОЧЬ =============== */
+[data-theme="night"] {
+  --bg-1: #050814;
+  --bg-2: #0a1428;
+  --panel: rgba(100, 120, 200, 0.08);
+  --panel-border: rgba(100, 120, 200, 0.2);
+  --text: #c8d0ff;
+  --text-dim: #6b7ab0;
+  --board-bg: rgba(0, 0, 0, 0.45);
+  --tile-correct-1: #00b894;
+  --tile-correct-2: #00cec9;
+}
+
+html[data-theme="night"], body[data-theme="night"] {
+  background:
+    radial-gradient(1px 1px at 10% 15%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 25% 45%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 10%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 55% 70%, #fff, transparent),
+    radial-gradient(1px 1px at 75% 25%, #fff, transparent),
+    radial-gradient(2px 2px at 90% 80%, #fff, transparent),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  background-attachment: fixed;
+}
+
+body[data-theme="night"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(1px 1px at 15% 85%, #fff, transparent),
+    radial-gradient(2px 2px at 60% 40%, #fff, transparent),
+    radial-gradient(1px 1px at 80% 60%, #a0c0ff, transparent);
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+body[data-theme="night"] .app::before {
+  content: "";
+  position: fixed;
+  top: 60px;
+  right: 40px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff8dc, #f0e68c);
+  box-shadow: 0 0 40px rgba(255,248,220,0.4), 0 0 80px rgba(255,248,220,0.2);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.is-mobile[data-theme="night"] .app::before {
+  display: none;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* =============== 🌲 ЛЕС — ДЕРЕВЬЯ ПОД ВСЕМИ ЭЛЕМЕНТАМИ =============== */
+[data-theme="forest"] {
+  --bg-1: #0a1810;
+  --bg-2: #1a3a28;
+  --panel: rgba(100, 200, 150, 0.06);
+  --panel-border: rgba(100, 200, 150, 0.15);
+  --text: #d4f0e0;
+  --text-dim: #7ab090;
+  --board-bg: rgba(0, 0, 0, 0.35);
+  --tile-correct-1: #55a630;
+  --tile-correct-2: #80b918;
+}
+
+html[data-theme="forest"], body[data-theme="forest"] {
+  background:
+    radial-gradient(circle at 85% 12%, rgba(255,248,220,0.25) 0%, rgba(255,248,220,0.1) 3%, transparent 8%),
+    radial-gradient(1px 1px at 15% 10%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 30% 20%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 60% 8%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 70% 25%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 95% 18%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(26,58,40,0.4) 0%, transparent 70%),
+    linear-gradient(180deg, #0a1810 0%, #0f2419 40%, #1a3a28 100%);
+  background-attachment: fixed;
+}
+
+/* ✅ Деревья на body::before (задний план) — z-index: -1 */
+body[data-theme="forest"]::before {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400' preserveAspectRatio='xMidYMax slice'><defs><linearGradient id='mist' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%231a3a28' stop-opacity='0.4'/><stop offset='1' stop-color='%231a3a28' stop-opacity='0.7'/></linearGradient></defs><g fill='url(%23mist)'><path d='M40,400 L40,280 L25,280 L50,220 L35,220 L60,160 L45,160 L70,100 L95,160 L80,160 L105,220 L90,220 L115,280 L100,280 L100,400 Z'/><path d='M160,400 L160,300 L145,300 L170,240 L155,240 L180,180 L205,240 L190,240 L215,300 L200,300 L200,400 Z'/><path d='M280,400 L280,260 L265,260 L290,200 L275,200 L300,140 L285,140 L310,80 L335,140 L320,140 L345,200 L330,200 L355,260 L340,260 L340,400 Z'/><path d='M400,400 L400,310 L388,310 L410,255 L398,255 L420,200 L442,255 L430,255 L452,310 L440,310 L440,400 Z'/><path d='M520,400 L520,270 L505,270 L530,210 L515,210 L540,150 L525,150 L550,90 L575,150 L560,150 L585,210 L570,210 L595,270 L580,270 L580,400 Z'/><path d='M660,400 L660,295 L648,295 L670,240 L658,240 L680,185 L702,240 L690,240 L712,295 L700,295 L700,400 Z'/><path d='M770,400 L770,320 L760,320 L780,270 L770,270 L790,220 L800,220 L800,400 Z'/></g></svg>");
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: 100% 100%;
+  opacity: 0.85;
+}
+
+/* ✅ Деревья на body::after (передний план) — z-index: -1 */
+body[data-theme="forest"]::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 350' preserveAspectRatio='xMidYMax slice'><defs><linearGradient id='fg' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%230a1a10' stop-opacity='0.9'/><stop offset='1' stop-color='%23050a05' stop-opacity='1'/></linearGradient></defs><g fill='url(%23fg)'><path d='M0,350 L0,280 L15,260 L5,260 L25,220 L12,220 L35,170 L58,220 L45,220 L65,260 L55,260 L70,280 L70,350 Z'/><path d='M90,350 L90,300 L105,285 L95,285 L115,245 L105,245 L130,190 L155,245 L145,245 L165,285 L155,285 L170,300 L170,350 Z'/><path d='M190,350 L190,260 L205,240 L195,240 L220,185 L208,185 L235,120 L262,185 L250,185 L275,240 L265,240 L280,260 L280,350 Z'/><path d='M310,350 L310,290 L325,275 L315,275 L335,235 L325,235 L350,180 L375,235 L365,235 L385,275 L375,275 L390,290 L390,350 Z'/><path d='M420,350 L420,275 L435,255 L425,255 L450,200 L438,200 L465,140 L492,200 L480,200 L505,255 L495,255 L510,275 L510,350 Z'/><path d='M540,350 L540,295 L552,282 L544,282 L562,245 L554,245 L575,200 L596,245 L588,245 L606,282 L598,282 L610,295 L610,350 Z'/><path d='M640,350 L640,265 L655,245 L645,245 L670,190 L658,190 L685,125 L712,190 L700,190 L725,245 L715,245 L730,265 L730,350 Z'/><path d='M750,350 L750,290 L762,278 L754,278 L772,240 L764,240 L785,195 L800,230 L800,350 Z'/><rect x='0' y='330' width='800' height='20'/></g></svg>");
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: 100% 100%;
+}

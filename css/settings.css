@@ -1,0 +1,171 @@
+/* =============== НАСТРОЙКИ =============== */
+.settings-section { display: flex; flex-direction: column; gap: 12px; }
+.section-title { font-size: 17px; font-weight: 700; color: var(--accent-2); }
+
+.theme-grid, .skin-grid, .lang-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.theme-item, .skin-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: var(--panel);
+  border: 2px solid var(--panel-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 150ms;
+  position: relative;
+}
+
+.theme-item:hover, .skin-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.theme-item.active, .skin-item.active {
+  border-color: var(--accent);
+  background: rgba(108,92,231,0.15);
+}
+
+.skin-item.locked { opacity: 0.5; cursor: not-allowed; }
+.skin-item.locked:hover { transform: none; border-color: var(--panel-border); }
+
+.skin-item.locked::after {
+  content: "🔒";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.theme-preview, .skin-preview {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  border: 1px solid var(--panel-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-name, .skin-name { font-size: 13px; font-weight: 600; text-align: center; }
+
+.skin-requirement {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* =============== ✅ КНОПКИ ЯЗЫКОВ =============== */
+.lang-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 12px;
+  background: var(--panel);
+  border: 2px solid var(--panel-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 150ms;
+  user-select: none;
+}
+
+.lang-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: rgba(108,92,231,0.1);
+}
+
+.lang-item.active {
+  border-color: var(--accent);
+  background: rgba(108,92,231,0.15);
+  box-shadow: 0 4px 12px rgba(108,92,231,0.3);
+}
+
+.lang-item:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.lang-flag {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lang-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  flex-shrink: 0;
+}
+
+.lang-item.active .lang-label {
+  color: var(--accent-2);
+}
+
+/* =============== ПРЕВЬЮ ТЕМ =============== */
+.theme-preview[data-theme="classic"] {
+  background:
+    repeating-linear-gradient(45deg, rgba(108,92,231,0.15) 0 2px, transparent 2px 12px),
+    repeating-linear-gradient(-45deg, rgba(0,210,255,0.1) 0 2px, transparent 2px 14px),
+    linear-gradient(135deg, #0f1226, #1a1f3a);
+}
+
+.theme-preview[data-theme="light"] {
+  background:
+    radial-gradient(ellipse 30px 15px at 30% 30%, rgba(108,92,231,0.25), transparent 70%),
+    radial-gradient(ellipse 25px 12px at 70% 60%, rgba(0,210,255,0.3), transparent 70%),
+    linear-gradient(135deg, #f5f7fa, #e8ecf1);
+}
+
+.theme-preview[data-theme="night"] {
+  background:
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 60% 50%, #fff, transparent),
+    radial-gradient(1px 1px at 80% 70%, #fff, transparent),
+    linear-gradient(180deg, #050814, #0a1428);
+  position: relative;
+}
+
+.theme-preview[data-theme="night"]::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff8dc, #f0e68c);
+  box-shadow: 0 0 8px rgba(255,248,220,0.6);
+}
+
+.theme-preview[data-theme="forest"] {
+  background:
+    radial-gradient(circle at 85% 15%, rgba(255,248,220,0.4) 0%, rgba(255,248,220,0.15) 4%, transparent 10%),
+    radial-gradient(1px 1px at 20% 20%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 50% 15%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.6), transparent),
+    linear-gradient(180deg, #0a1810 0%, #0f2419 40%, #1a3a28 100%);
+  position: relative;
+}
+
+.theme-preview[data-theme="forest"]::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='xMidYMax slice'><g fill='%231a3a28' opacity='0.6'><path d='M10,60 L10,40 L5,40 L15,20 L25,40 L20,40 L20,60 Z'/><path d='M35,60 L35,35 L30,35 L40,15 L50,35 L45,35 L45,60 Z'/><path d='M60,60 L60,38 L55,38 L65,18 L75,38 L70,38 L70,60 Z'/><path d='M85,60 L85,42 L80,42 L90,25 L100,42 L95,42 L95,60 Z'/></g><g fill='%230a1a10'><path d='M0,60 L0,45 L3,45 L8,30 L13,45 L16,45 L16,60 Z'/><path d='M22,60 L22,38 L26,38 L32,22 L38,38 L42,38 L42,60 Z'/><path d='M50,60 L50,40 L54,40 L60,25 L66,40 L70,40 L70,60 Z'/><path d='M75,60 L75,42 L78,42 L83,28 L88,42 L91,42 L91,60 Z'/><rect x='0' y='55' width='100' height='5'/></g></svg>");
+  background-repeat: no-repeat;
+  background-position: bottom center;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
